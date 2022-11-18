@@ -6,12 +6,14 @@ namespace MyCourse.Controllers
     {
         public IActionResult Index()
         {
-            return Content("Sono Index di Courses");
+            // return Content("Sono Index di Courses");
+            return View();
         }
 
         public IActionResult Detail(string id)
         {
-            return Content($"Sono Detail di Courses, ho ricevuto l'id {id}");
+            // return Content($"Sono Detail di Courses, ho ricevuto l'id {id}");
+            return View();
         }
     }
 }
