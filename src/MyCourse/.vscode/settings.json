@@ -9,5 +9,9 @@
             "Views/**/*.cshtml",
             "wwwroot/**/*"
         ]
-    }
+    },
+    "fontAwesomeAutocomplete.patterns": [
+        "**/*.cshtml"
+    ],
+    "fontAwesomeAutocomplete.triggerWord": "f-"
 }
