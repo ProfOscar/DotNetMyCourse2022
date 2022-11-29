@@ -10,14 +10,18 @@ namespace MyCourse.Controllers
         public IActionResult Index()
         {
             CourseService courseService = new CourseService();
-            List<CourseViewModel> courses = courseService.GetServices();
+            List<CourseViewModel> courses = courseService.GetCourses();
+            ViewBag.Title = "Catalogo dei corsi";
             return View(courses);
         }
 
-        public IActionResult Detail(string id)
+        public IActionResult Detail(int id)
         {
-            // return Content($"Sono Detail di Courses, ho ricevuto l'id {id}");
-            return View();
+            CourseService courseService = new CourseService();
+            CourseDetailViewModel viewModel = courseService.GetCourse(id);
+            ViewBag.Title = viewModel.Title;
+            return View(viewModel
+            );
         }
     }
 }
