@@ -7,9 +7,16 @@ namespace MyCourse.Controllers
 {
     public class CoursesController : Controller
     {
+        private readonly ICourseService courseService;
+
+        public CoursesController(ICourseService courseService)
+        {
+            this.courseService = courseService;
+            
+        }
+
         public IActionResult Index()
         {
-            CourseService courseService = new CourseService();
             List<CourseViewModel> courses = courseService.GetCourses();
             ViewBag.Title = "Catalogo dei corsi";
             return View(courses);
@@ -17,7 +24,6 @@ namespace MyCourse.Controllers
 
         public IActionResult Detail(int id)
         {
-            CourseService courseService = new CourseService();
             CourseDetailViewModel viewModel = courseService.GetCourse(id);
             ViewBag.Title = viewModel.Title;
             return View(viewModel
