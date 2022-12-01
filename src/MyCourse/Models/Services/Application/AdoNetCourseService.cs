@@ -16,8 +16,8 @@ namespace MyCourse.Models.Services.Application
 
         public CourseDetailViewModel GetCourse(int id)
         {
-            string query = "SELECT Id, Title, Description, ImagePath, Author, Rating, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency FROM Courses WHERE Id=" + id +
-            "; SELECT Id, Title, Description, Duration FROM Lessons WHERE CourseId=" + id;
+            FormattableString query = $@"SELECT Id, Title, Description, ImagePath, Author, Rating, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency FROM Courses WHERE Id={id}
+                ; SELECT Id, Title, Description, Duration FROM Lessons WHERE CourseId={id}";
             DataSet dataSet = db.Query(query);
 
             //Course
@@ -42,7 +42,7 @@ namespace MyCourse.Models.Services.Application
 
         public List<CourseViewModel> GetCourses()
         {
-            string query = "SELECT Id, Title, ImagePath, Author, Rating, FullPrice_Currency, FullPrice_Amount, CurrentPrice_Currency, CurrentPrice_Amount FROM Courses";
+            FormattableString query = $"SELECT Id, Title, ImagePath, Author, Rating, FullPrice_Currency, FullPrice_Amount, CurrentPrice_Currency, CurrentPrice_Amount FROM Courses";
             DataSet dataSet = db.Query(query);
             var dataTable = dataSet.Tables[0];
             var courseList = new List<CourseViewModel>();
