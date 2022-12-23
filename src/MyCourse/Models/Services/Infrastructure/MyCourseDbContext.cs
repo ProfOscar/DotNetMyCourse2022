@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace MyCourse.Models.Entities
+namespace MyCourse.Models.Services.Infrastructure
 {
     public partial class MyCourseDbContext : DbContext
     {
@@ -37,6 +37,34 @@ namespace MyCourse.Models.Entities
                 entity.HasKey(course => course.Id); // Superfluo se la proprietà si chiama Id oppure CoursesId
                 // entity.HasKey(course => new { course.Id, course.Author }); // In caso di chiavi primarie composte
 
+                // Mapping per gli owned types - BEGIN
+
+                // Sintassa compatta con nomi di default    
+                // entity.OwnsOne(course => course.CurrentPrice);
+                // campo sul DB: CurrentPrice_Amount
+                // campo sul DB: CurrentPrice_Currency
+
+                // Sintassi completa e personalizzabile
+                entity.OwnsOne(course => course.CurrentPrice, builder =>
+                {
+                    builder.Property(money => money.Currency)
+                    .HasConversion<string>() // perchè su DB è stringa, ma la proprietà è un enum
+                    .HasColumnName("CurrentPrice_Currency");
+                    builder.Property(money => money.Amount).HasColumnName("CurrentPrice_Amount");
+                });
+
+                // Sintassi con solo gli elementi indispensabili
+                entity.OwnsOne(course => course.FullPrice, builder =>
+                {
+                    builder.Property(money => money.Currency).HasConversion<string>();
+                });
+
+                // Mapping per gli owned types - END
+
+                // Mapping per le relazioni
+                entity.HasMany(course => course.Lessons)
+                    .WithOne(lesson => lesson.Course)
+                    .HasForeignKey(lesson => lesson.CourseId); // Superflua se la proprietà si chiama CourseId
 
                 #region Mapping generato automaticamente dal tool di reverse engineering
                 /*
@@ -85,6 +113,11 @@ namespace MyCourse.Models.Entities
 
             modelBuilder.Entity<Lesson>(entity =>
             {
+                /* Superfluo qui perché già fatto nell'entità correlata Course
+                entity.HasOne(lesson => lesson.Course)
+                    .WithMany(course => course.Lessons);
+                */
+
                 #region Mapping generato automaticamente dal tool di reverse engineering
                 /*
                 entity.Property(e => e.Id).ValueGeneratedNever();
