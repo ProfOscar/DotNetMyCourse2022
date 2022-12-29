@@ -35,8 +35,8 @@
                 <div class="price">
                     @Model.CurrentPrice
                     @if (!Model.CurrentPrice.Equals(Model.FullPrice))
-                    {            
-                            <br><s>@Model.FullPrice</s>
+                    {
+                        <br><s>@Model.FullPrice</s>
                     }
                 </div>
                 <img src="@Model.ImagePath" class="img-fluid course-image" alt="@Model.Title">
@@ -46,8 +46,8 @@
 </section>
 
 <section class="course-lessons">
-	<h2>Lezioni (@Model.Lessons.Count)</h2>
-	@foreach (var lesson in Model.Lessons)
+    <h2>Lezioni (@Model.Lessons.Count)</h2>
+    @foreach (var lesson in Model.Lessons)
     {
         <hr>
         <div class="row">
@@ -56,6 +56,9 @@
             </div>
             <div class="col-md-3 d-flex align-items-center lesson-duration">
                 <i class="far fa-clock"></i><time>@lesson.Duration.ToString("m'm 's's'")</time>
+            </div>
+            <div class="col-md-12">
+                <p>@lesson.Description</p>
             </div>
         </div>
     }

@@ -1,6 +1,5 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
+using MyCourse.Models.Entities;
 
 namespace MyCourse.Models.Services.Infrastructure
 {
