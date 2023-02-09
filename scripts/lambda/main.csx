@@ -1,6 +1,6 @@
 #!/usr/bin/env dotnet-script
 
-// FIRST TEST
+// LAMBDA TEST
 
 Func<DateTime, bool> canDrive = dob =>
 {
@@ -16,53 +16,24 @@ Action<DateTime> printDate = date => Console.WriteLine(date);
 printDate(dob);
 
 
-// SECOND TEST
+// Una lambda che prende in input due parametri stringa e restituisce la loro concatenazione
+Func<string, string, string> stConcat = (st1, st2) => { return st1 + " " + st2; };
+Console.WriteLine(stConcat("Paolino", "Paperino"));
 
-class Apple
+// Una lambda che prende in input 3 parametri interi e restituisce il più grande dei 3
+Func<int, int, int, int> maxInt = (a, b, c) =>
 {
-    public string Color { get; set; }
-    public int Weight { get; set; }
-}
-
-List<Apple> apples = new List<Apple> {
-    new Apple {Color= "Red", Weight= 180},
-    new Apple {Color= "Green", Weight= 195},
-    new Apple {Color= "Red", Weight= 190},
-    new Apple {Color= "Green", Weight= 185}
+    int max = a;
+    if (b > max) max = b;
+    if (c > max) max = c;
+    return max;
 };
+Console.WriteLine(maxInt(12, 67, 4));
 
-// sintassi prolissa
-// Func<Apple, bool> takeRedApples = apple => apple.Color == "Red";
-// IEnumerable<Apple> redApples = apples.Where(takeRedApples);
-
-// sintassi compatta
-IEnumerable<Apple> redApples = apples.Where(a => a.Color == "Red");
-
-// uso simultaneo di Where, Select, Average
-double average = apples
-    .Where(a => a.Color == "Red")
-    .Select(a => a.Weight)
-    .Average();
-Console.WriteLine($"La media di peso delle mele rosse è {average}");
-
-int minimumWeight = apples
-    .Select(a => a.Weight)
-    .Min();
-Console.WriteLine($"La mela più leggera pesa {minimumWeight}");
-
-string color = apples
-    .Where(a => a.Weight == 190)
-    .Select(a => a.Color)
-    .First();
-Console.WriteLine($"La mela che pesa 190 è di colore {color}");
-
-int redAppleCount = apples
-    .Where(a => a.Color == "Red")
-    .Count();
-Console.WriteLine($"Ci sono {redAppleCount} mele rosse");
-
-int totalGreenWeight = apples
-    .Where(a => a.Color == "Green")
-    .Select(a => a.Weight)
-    .Sum();
-Console.WriteLine($"Le mele verdi pesano in totale {totalGreenWeight}");
+// Una lambda che prende 2 parametri DateTime e non restituisce nulla, ma stampa a video la minore delle 2 date
+Action<DateTime, DateTime> minDate = (d1, d2) =>
+{
+    if (d1.CompareTo(d2) < 0) Console.WriteLine(d1);
+    else Console.WriteLine(d2);
+};
+minDate(new DateTime(2023, 06, 25), DateTime.Today);
