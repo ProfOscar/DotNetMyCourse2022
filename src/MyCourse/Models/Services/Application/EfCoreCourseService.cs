@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using MyCourse.Models.Options;
 using MyCourse.Models.Services.Infrastructure;
 using MyCourse.Models.ViewModels;
 
@@ -11,9 +13,11 @@ namespace MyCourse.Models.Services.Application
     public class EfCoreCourseService : ICourseService
     {
         private readonly MyCourseDbContext dbContext;
+        private readonly IOptionsMonitor<CoursesOptions> coursesOptions;
 
-        public EfCoreCourseService(MyCourseDbContext dbContext)
+        public EfCoreCourseService(MyCourseDbContext dbContext, IOptionsMonitor<CoursesOptions> coursesOptions)
         {
+            this.coursesOptions = coursesOptions;
             this.dbContext = dbContext;
         }
 
