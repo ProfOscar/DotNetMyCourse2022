@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
+using MyCourse.Models.Options;
 using MyCourse.Models.ViewModels;
 
 namespace MyCourse.Models.Services.Application
@@ -10,8 +12,10 @@ namespace MyCourse.Models.Services.Application
     {
         private readonly ICourseService courseService;
         private readonly IMemoryCache memoryCache;
-        public MemoryCacheCourseService(ICourseService courseService, IMemoryCache memoryCache)
+        public IOptionsMonitor<CoursesOptions> coursesOptions;
+        public MemoryCacheCourseService(ICourseService courseService, IMemoryCache memoryCache, IOptionsMonitor<CoursesOptions> coursesOptions)
         {
+            this.coursesOptions = coursesOptions;
             this.courseService = courseService;
             this.memoryCache = memoryCache;
         }
@@ -19,7 +23,7 @@ namespace MyCourse.Models.Services.Application
         {
             return memoryCache.GetOrCreateAsync($"Course{id}", cacheEntry =>
             {
-                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(60));
+                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(coursesOptions.CurrentValue.CacheExpiration));
                 return courseService.GetCourseAsync(id);
             });
         }
@@ -28,7 +32,7 @@ namespace MyCourse.Models.Services.Application
         {
             return memoryCache.GetOrCreateAsync($"Courses", cacheEntry =>
             {
-                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(60));
+                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(coursesOptions.CurrentValue.CacheExpiration));
                 return courseService.GetCoursesAsync();
             });
         }
