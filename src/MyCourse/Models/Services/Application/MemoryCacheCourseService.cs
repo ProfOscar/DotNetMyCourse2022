@@ -19,19 +19,24 @@ namespace MyCourse.Models.Services.Application
             this.courseService = courseService;
             this.memoryCache = memoryCache;
         }
+
+        //TODO: ricordati di usare memoryCache.Remove($"Course{id}") quando aggiorni il corso
         public Task<CourseDetailViewModel> GetCourseAsync(int id)
         {
             return memoryCache.GetOrCreateAsync($"Course{id}", cacheEntry =>
             {
+                cacheEntry.SetSize(1);
                 cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(coursesOptions.CurrentValue.CacheExpiration));
                 return courseService.GetCourseAsync(id);
             });
         }
 
+        //TODO: ricordati di usare memoryCache.Remove("Courses") quando aggiungi o elimini dei corsi
         public Task<List<CourseViewModel>> GetCoursesAsync()
         {
             return memoryCache.GetOrCreateAsync($"Courses", cacheEntry =>
             {
+                cacheEntry.SetSize(1);
                 cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(coursesOptions.CurrentValue.CacheExpiration));
                 return courseService.GetCoursesAsync();
             });
