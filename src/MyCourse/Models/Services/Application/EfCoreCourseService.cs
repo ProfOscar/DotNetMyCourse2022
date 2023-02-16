@@ -48,10 +48,14 @@ namespace MyCourse.Models.Services.Application
             return viewModel;
         }
 
-        public async Task<List<CourseViewModel>> GetCoursesAsync()
+        public async Task<List<CourseViewModel>> GetCoursesAsync(string search)
         {
+            search = search ?? "";
             IQueryable<CourseViewModel> queryLinq = dbContext.Courses
                 .AsNoTracking() //Miglioramento prestazionale disabilitando il "change tracking" (ottimo in situazioni read-only)
+                .Where(course => course.Title.ToLower().Contains(search.ToLower()))
+                // .Where(course => EF.Functions.Like(course.Title, $"%{search}%")) // funziona ed è case-insensitive usando il LIKE
+                // .Where(course => course.Title.Contains(search)) // funziona, ma è case-sensitive, pertanto scomoda
                 .Select(course => CourseViewModel.FromEntity(course)); //Usando metodi statici come FromEntity, la query potrebbe essere inefficiente. Mantenere il mapping nella lambda oppure usare un extension method personalizzato
 
             List<CourseViewModel> courses = await queryLinq.ToListAsync(); //La query al database viene inviata qui, quando manifestiamo l'intenzione di voler leggere i risultati

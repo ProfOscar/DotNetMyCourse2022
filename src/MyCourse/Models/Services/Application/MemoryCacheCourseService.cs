@@ -25,20 +25,20 @@ namespace MyCourse.Models.Services.Application
         {
             return memoryCache.GetOrCreateAsync($"Course{id}", cacheEntry =>
             {
-                cacheEntry.SetSize(1);
+                // cacheEntry.SetSize(1);
                 cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(coursesOptions.CurrentValue.CacheExpiration));
                 return courseService.GetCourseAsync(id);
             });
         }
 
         //TODO: ricordati di usare memoryCache.Remove("Courses") quando aggiungi o elimini dei corsi
-        public Task<List<CourseViewModel>> GetCoursesAsync()
+        public Task<List<CourseViewModel>> GetCoursesAsync(string search)
         {
-            return memoryCache.GetOrCreateAsync($"Courses", cacheEntry =>
+            return memoryCache.GetOrCreateAsync($"Courses{search}", cacheEntry =>
             {
-                cacheEntry.SetSize(1);
+                // cacheEntry.SetSize(1);
                 cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(coursesOptions.CurrentValue.CacheExpiration));
-                return courseService.GetCoursesAsync();
+                return courseService.GetCoursesAsync(search);
             });
         }
     }

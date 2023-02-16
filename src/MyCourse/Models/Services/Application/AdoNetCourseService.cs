@@ -53,9 +53,9 @@ namespace MyCourse.Models.Services.Application
             return courseDetailViewModel;
         }
 
-        public async Task<List<CourseViewModel>> GetCoursesAsync()
+        public async Task<List<CourseViewModel>> GetCoursesAsync(string search)
         {
-            FormattableString query = $"SELECT Id, Title, ImagePath, Author, Rating, FullPrice_Currency, FullPrice_Amount, CurrentPrice_Currency, CurrentPrice_Amount FROM Courses";
+            FormattableString query = $"SELECT Id, Title, ImagePath, Author, Rating, FullPrice_Currency, FullPrice_Amount, CurrentPrice_Currency, CurrentPrice_Amount FROM Courses WHERE title LIKE {"%" + search + "%"}";
             DataSet dataSet = await db.QueryAsync(query);
             var dataTable = dataSet.Tables[0];
             var courseList = new List<CourseViewModel>();
