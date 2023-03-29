@@ -32,6 +32,24 @@ namespace MyCourse.Models.Services.Application
             });
         }
 
+        public Task<List<CourseViewModel>> GetBestRatingCoursesAsync()
+        {
+            return memoryCache.GetOrCreateAsync($"BestRatingCourses", cacheEntry =>
+            {
+                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(60));
+                return courseService.GetBestRatingCoursesAsync();
+            });
+        }
+
+        public Task<List<CourseViewModel>> GetMostRecentCoursesAsync()
+        {
+            return memoryCache.GetOrCreateAsync($"MostRecentCourses", cacheEntry =>
+            {
+                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(60));
+                return courseService.GetMostRecentCoursesAsync();
+            });
+        }
+
         //TODO: ricordati di usare memoryCache.Remove("Courses") quando aggiungi o elimini dei corsi
         public Task<ListViewModel<CourseViewModel>> GetCoursesAsync(CourseListInputModel model)
         {
