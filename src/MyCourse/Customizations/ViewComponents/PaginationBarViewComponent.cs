@@ -6,7 +6,7 @@ namespace MyCourse.Customizations.ViewComponents
     // [ViewComponent(Name = "Pagination")]
     public class PaginationBarViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke(CourseListViewModel model)
+        public IViewComponentResult Invoke(IPaginationInfo model)
         {
             // num pag corrente
             // num ris totali
