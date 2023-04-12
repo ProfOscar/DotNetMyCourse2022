@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using MyCourse.Models.Options;
 using MyCourse.Models.Services.Application;
 using MyCourse.Models.Services.Infrastructure;
@@ -37,7 +38,7 @@ namespace MyCourse
                 Configuration.Bind("ResponseCache:Home", homeProfile);
                 options.CacheProfiles.Add("Home", homeProfile);
 
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             // services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<ICourseService, AdoNetCourseService>();
@@ -61,7 +62,7 @@ namespace MyCourse
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
             if (env.IsProduction())
             {
@@ -86,14 +87,25 @@ namespace MyCourse
 
             app.UseStaticFiles();
 
+            // EndpointRoutingMiddleware
+            app.UseRouting();
+
             app.UseResponseCaching();
 
+            // EndpointMiddleware
+            app.UseEndpoints(routeBuilder =>
+            {
+                routeBuilder.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            });
+            
             // app.UseMvcWithDefaultRoute();
+            /*
             app.UseMvc(routeBuilder =>
             {
                 // /courses/detail/5
                 routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
+            */
         }
     }
 }
