@@ -36,7 +36,9 @@ namespace MyCourse.Models.Services.Infrastructure
                     builder.Property(money => money.Currency)
                     .HasConversion<string>() // perchè su DB è stringa, ma la proprietà è un enum
                     .HasColumnName("CurrentPrice_Currency");
-                    builder.Property(money => money.Amount).HasColumnName("CurrentPrice_Amount");
+                    builder.Property(money => money.Amount)
+                    .HasConversion<float>() 
+                    .HasColumnName("CurrentPrice_Amount");
                 });
 
                 // Sintassi con solo gli elementi indispensabili

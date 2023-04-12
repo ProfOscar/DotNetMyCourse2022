@@ -124,16 +124,16 @@ namespace MyCourse.Models.Services.Application
                     break;
             }
 
-            IQueryable<CourseViewModel> queryLinq = baseQuery
+            IQueryable<Course> queryLinq = baseQuery
                 .AsNoTracking() //Miglioramento prestazionale disabilitando il "change tracking" (ottimo in situazioni read-only)
-                .Where(course => course.Title.ToLower().Contains(model.Search.ToLower()))
-                // .Where(course => EF.Functions.Like(course.Title, $"%{search}%")) // funziona ed è case-insensitive usando il LIKE
-                // .Where(course => course.Title.Contains(search)) // funziona, ma è case-sensitive, pertanto scomoda
-                .Select(course => CourseViewModel.FromEntity(course)); //Usando metodi statici come FromEntity, la query potrebbe essere inefficiente. Mantenere il mapping nella lambda oppure usare un extension method personalizzato
+                .Where(course => course.Title.ToLower().Contains(model.Search.ToLower()));
+            // .Where(course => EF.Functions.Like(course.Title, $"%{search}%")) // funziona ed è case-insensitive usando il LIKE
+            // .Where(course => course.Title.Contains(search)) // funziona, ma è case-sensitive, pertanto scomoda
 
             List<CourseViewModel> courses = await queryLinq
                 .Skip(model.Offset)
                 .Take(model.Limit)
+                .Select(course => CourseViewModel.FromEntity(course))
                 .ToListAsync(); //La query al database viene inviata qui, quando manifestiamo l'intenzione di voler leggere i risultati
 
             int totalCount = await queryLinq.CountAsync();
