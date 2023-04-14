@@ -91,15 +91,15 @@ namespace MyCourse.Models.Services.Application
             FormattableString query = $@"SELECT Id, Title, ImagePath, Author, Rating, FullPrice_Currency, FullPrice_Amount, CurrentPrice_Currency, CurrentPrice_Amount FROM Courses WHERE title LIKE {"%" + model.Search + "%"} ORDER BY {(Sql)orderby} {(Sql)direction} LIMIT {model.Limit} OFFSET {model.Offset};
             SELECT COUNT(*) FROM Courses WHERE title LIKE {"%" + model.Search + "%"}";
             DataSet dataSet = await db.QueryAsync(query);
-            var dataTable = dataSet.Tables[0];
-            var courseList = new List<CourseViewModel>();
+            DataTable dataTable = dataSet.Tables[0];
+            List<CourseViewModel> courseList = new();
             foreach (DataRow courseRow in dataTable.Rows)
             {
                 CourseViewModel course = CourseViewModel.FromDataRow(courseRow);
                 courseList.Add(course);
             }
 
-            ListViewModel<CourseViewModel> result = new ListViewModel<CourseViewModel>()
+            ListViewModel<CourseViewModel> result = new()
             {
                 Results = courseList,
                 TotalCount = Convert.ToInt32(dataSet.Tables[1].Rows[0][0])

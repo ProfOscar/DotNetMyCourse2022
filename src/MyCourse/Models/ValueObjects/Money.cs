@@ -3,16 +3,16 @@ using MyCourse.Models.Enums;
 
 namespace MyCourse.Models.ValueObjects
 {
-    public class Money
+    public record Money
     {
-        public Money() : this(Currency.EUR, 0.00m)
-        {
-        }
+        public Money() : this(Currency.EUR, 0.00m) { }
+
         public Money(Currency currency, decimal amount)
         {
             Amount = amount;
             Currency = currency;
         }
+
         private decimal amount = 0;
         public decimal Amount
         {
@@ -20,7 +20,7 @@ namespace MyCourse.Models.ValueObjects
             {
                 return amount;
             }
-            set
+            init
             {
                 if (value < 0)
                 {
@@ -29,22 +29,10 @@ namespace MyCourse.Models.ValueObjects
                 amount = value;
             }
         }
+
         public Currency Currency
         {
-            get; set;
-        }
-
-        public override bool Equals(object obj)
-        {
-            var money = obj as Money;
-            return money != null &&
-                   Amount == money.Amount &&
-                   Currency == money.Currency;
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Amount, Currency);
+            get; init;
         }
 
         public override string ToString()
