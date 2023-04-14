@@ -38,12 +38,7 @@ namespace MyCourse
                 Configuration.Bind("ResponseCache:Home", homeProfile);
                 options.CacheProfiles.Add("Home", homeProfile);
 
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-
-#if DEBUG
-            .AddRazorRuntimeCompilation();
-#endif
-            ;
+            });
 
             // services.AddTransient<ICourseService, CourseService>();
             // services.AddTransient<ICourseService, AdoNetCourseService>();
